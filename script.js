@@ -1,58 +1,55 @@
-let box = document.getElementById('box'),
-    btn = document.getElementsByTagName('button'), // Множественное число Elements говорит о том, что это псевдо-массив
-    circle = document.getElementsByClassName('circle'), // Множественное число Elements говорит о том, что это псевдо-массив, без точки
-    heart = document.querySelectorAll('.heart'), // этот псевдо-массив имеет только один метод forEach
-    wrapper = document.querySelector('.wrapper');
+// window - окно, где показывается документ. Оно включает в себя панель с вкладками, плагины установленные в браузер и т.д.
+// screen - весь монитор. На эти параметры мы не можем повлиять
 
-// изменяем стили элементов
+//В js пиксели пишутся без единиц измерения
 
-// в js для задания стилей используется camel case
-box.style.backgroundColor = 'blue';
+// Как получить размеры элемента
 
-// вторую кнопку делаем овальной
-btn[1].style.borderRadius = '50%';
+// Все эти параметры доступны только для чтения
 
-//круги превращаем в светофор
-circle[0].style.backgroundColor = 'red';
-circle[1].style.backgroundColor = 'yellow';
-circle[2].style.backgroundColor = 'green';
+//clientWidth - ширина элемента без полос прокрутки и без бордера. Включает паддинги
 
-//heart.forEach(item => {
-//    item.style.background = 'green';
+//let box = document.querySelector('.box');
+//let width = box.clientWidth,
+//    height = box.clientHeight;
+
+//console.log(width, height);
+
+// Если нужно получить размеры с бордером и полосой прокрутки, нужно использовать offsetWidth и offsetHeight
+
+//let box = document.querySelector('.box');
+//let width = box.offsetWidth,
+//    height = box.offsetHeight;
+
+//console.log(width, height);
+
+//Если нужно посмотреть всю прокрутку, то используется scrollWidth и scrollHeight
+
+//let box = document.querySelector('.box'),
+//    btn = document.querySelector('button');
+//let width = box.scrollWidth,
+//    height = box.scrollHeight;
+
+//console.log(width, height);
+
+//btn.addEventListener('click', function () {
+//    box.style.height = box.scrollHeight + 'px';
 //});
 
-// чтобы создать новый элемент
+// Для получения координат
 
-let div = document.createElement('div'),
-    text = document.createTextNode('text here...');
+let box = document.querySelector('.box'),
+    btn = document.querySelector('button');
+let width = box.scrollWidth,
+    height = box.scrollHeight;
 
-//добавляем класс к созданному элементу
-div.classList.add('black');
+console.log(width, height);
+console.log(box.getBoundingClientRect().top);
 
-//вставляем элемент на страницу
-// document.body.appendChild(div);
+// Для получения размера документа
+console.log(document.documentElement.clientWidth);
+console.log(document.documentElement.clientHeight);
 
-// вставлять элементы можно не только в body, но в любой родительский элемент
-wrapper.appendChild(div);
-
-// вставить элемент до
-document.body.insertBefore(div, circle[0]);
-
-// удаление элемента со страницы
-document.body.removeChild(circle[1]);
-wrapper.removeChild(heart[0]);
-document.body.replaceChild(btn[1], circle[1]);
-
-// добавляем текст в эелемент
-div.innerHTML = 'Hello';
-
-// если хотим вставить HTML код, но безопаснее div.textContent = '<h1>Hello</h1>';
-div.innerHTML = '<h1>Hello</h1>';
-
-
-// - выборка элементов на странице
-// - добавление стилей
-// - добавление элементов на страницу
-// - удаление элементов
-// - замена элементов
-// - добавление текста в элементы
+btn.addEventListener('click', function () {
+    box.style.height = box.scrollHeight + 'px';
+});
