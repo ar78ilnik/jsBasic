@@ -1,58 +1,135 @@
-let box = document.getElementById('box'),
-    btn = document.getElementsByTagName('button'), // Множественное число Elements говорит о том, что это псевдо-массив
-    circle = document.getElementsByClassName('circle'), // Множественное число Elements говорит о том, что это псевдо-массив, без точки
-    heart = document.querySelectorAll('.heart'), // этот псевдо-массив имеет только один метод forEach
-    wrapper = document.querySelector('.wrapper');
+//function User(name, id) {
+//    this.name = name;
+//    this.id = id;
+//    this.human = true;
+//    this.hello = function () {
+//        console.log('hello ' + this.name);
+//    }
+//}
 
-// изменяем стили элементов
+// Свойство prototype позволяет добавлять новые методы в наш конструктор и они будут наследоваться у потомков.
+//User.prototype.exit = function (name) {
+//    console.log('User ' + this.name + ' have been exit');
+//}
 
-// в js для задания стилей используется camel case
-box.style.backgroundColor = 'blue';
+//let ivan = new User('Ivan', 5),
+//    alex = new User('Alex', 20);
 
-// вторую кнопку делаем овальной
-btn[1].style.borderRadius = '50%';
+//console.log(ivan);
+//console.log(alex);
 
-//круги превращаем в светофор
-circle[0].style.backgroundColor = 'red';
-circle[1].style.backgroundColor = 'yellow';
-circle[2].style.backgroundColor = 'green';
+//ivan.exit();
 
-//heart.forEach(item => {
-//    item.style.background = 'green';
-//});
+//В стандарте ES6
 
-// чтобы создать новый элемент
+//class User {
+//    constructor(name, id) {
+//        this.name = name;
+//        this.id = id;
+//        this.human = true;
+//    }
+//    hello() {
+//        console.log(`Hello ${this.name}`);
+//    }
+//    exit(name) {
+//        console.log(`User ${this.name} have been exit`);
+//    }
+//}
+//
+//let ivan = new User('Ivan', 5),
+//    alex = new User('Alex', 20);
+//
+//console.log(ivan);
+//console.log(alex);
+//
+//ivan.hello();
+//alex.hello();
 
-let div = document.createElement('div'),
-    text = document.createTextNode('text here...');
+// Функции вызываются 4 способами и в каждом контекст вызова будет отличатся
 
-//добавляем класс к созданному элементу
-div.classList.add('black');
+//function showThis() {
+//    console.log(this);
+//}
+//
+//showThis();
 
-//вставляем элемент на страницу
-// document.body.appendChild(div);
+// 1) В случае простого вызова функции, this это объект. Он определяется средой исполнения и в браузере это объект Window. Функция showThis ни к чему не привязана и она не знает в каком контексте ей исполнятся
 
-// вставлять элементы можно не только в body, но в любой родительский элемент
-wrapper.appendChild(div);
+//'use strict';
+//
+//function showThis(a, b) {
+//    console.log(this);
+//
+//    function sum() {
+//        console.log(this);
+//        return a + b;
+//    }
+//    console.log(sum());
+//}
+//
+//showThis(4, 3);
 
-// вставить элемент до
-document.body.insertBefore(div, circle[0]);
+// Функция внутри функции своим контекстом все равно считает Window. Чтобы посчитать правильно нашу функцию, нужно сделать замыкание функции. Если функция не находит в себе переметров a и b, то она ищет их вне себя. Нужно убрать слово this из суммы, чтобы функция смогла искать параметры вне себя. В новом стандарте, функции, заключенные в 'use strict', если без контекста выдают undefined вместо Window.
 
-// удаление элемента со страницы
-document.body.removeChild(circle[1]);
-wrapper.removeChild(heart[0]);
-document.body.replaceChild(btn[1], circle[1]);
+// 2) 
 
-// добавляем текст в эелемент
-div.innerHTML = 'Hello';
+//let obj = {
+//    a: 20,
+//    b: 15,
+//    sum: function () {
+//        console.log(this);
+//    }
+//}
+//
+//obj.sum();
 
-// если хотим вставить HTML код, но безопаснее div.textContent = '<h1>Hello</h1>';
-div.innerHTML = '<h1>Hello</h1>';
+// Когда функция является методом объекта, контекст выполнения это и есть сам объект
 
+//3) 
 
-// - выборка элементов на странице
-// - добавление стилей
-// - добавление элементов на страницу
-// - удаление элементов
-// - замена элементов
-// - добавление текста в элементы
+//class User {
+//    constructor(name, id) {
+//        this.name = name;
+//        this.id = id;
+//        this.human = true;
+//    }
+//    hello() {
+//        console.log(`Hello ${this.name}`);
+//    }
+//    exit(name) {
+//        console.log(`User ${this.name} have been exit`);
+//    }
+//}
+//
+//let ivan = new User('Ivan', 5),
+//    alex = new User('Alex', 20);
+
+// В конструкторе (new) контекстом вызова будет созданный объект
+
+// 4) 
+
+//let user = {
+//    name: "John"
+//}
+//
+//function sayName(surname) {
+//    console.log("this:", this);
+//    console.log(this.name + surname);
+//}
+
+// Сейчас эти две функции никак не связаны. Нужно насильно связать эти функции.
+
+//console.log(sayName.call(user, 'Tim'));
+//console.log(sayName.apply(user, ['Smith']));
+
+//с помощью функции call мы связываем функцию sayName и объект user. Теперь контекст вызова будет тот, который мы указали (объект user), а не Window. Если наша функция sayName получит еще один аргумент, surname, то имя мы получаем из объекта, то фамилию мы получаем вручную. Разница между call и apply в аргументах. В call передается строка, в apply передается массив
+
+// Как контекст вызова работает в DOM
+
+let btn = document.querySelector('.box');
+btn.addEventListener('click', function () {
+    console.log(this);
+    this.style.backgroundColor = 'aqua';
+});
+
+// если в обработчиках событий мы используем контекст вызова и использование вызова обычной функции, то наш контекст вызова и есть тот элемент, на котором применяется событие
