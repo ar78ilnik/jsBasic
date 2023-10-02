@@ -1,58 +1,101 @@
-let box = document.getElementById('box'),
-    btn = document.getElementsByTagName('button'), // Множественное число Elements говорит о том, что это псевдо-массив
-    circle = document.getElementsByClassName('circle'), // Множественное число Elements говорит о том, что это псевдо-массив, без точки
-    heart = document.querySelectorAll('.heart'), // этот псевдо-массив имеет только один метод forEach
-    wrapper = document.querySelector('.wrapper');
+// 3.9 Стандарт ES6. Интерполяция
 
-// изменяем стили элементов
+let name = "Ivan",
+    age = 30,
+    mail = "ex@mail.ru";
 
-// в js для задания стилей используется camel case
-box.style.backgroundColor = 'blue';
+document.write('Пользователю ' + name + ' ' + age + ' лет. Его почтовый адрес: ' + mail);
 
-// вторую кнопку делаем овальной
-btn[1].style.borderRadius = '50%';
+// С помощью интерполяции можно создать такую строку более изящно
 
-//круги превращаем в светофор
-circle[0].style.backgroundColor = 'red';
-circle[1].style.backgroundColor = 'yellow';
-circle[2].style.backgroundColor = 'green';
+document.write(`Пользователю ${name} ${age} лет. Его почтовый адрес: ${mail}`);
 
-//heart.forEach(item => {
-//    item.style.background = 'green';
-//});
+//https://habr.com/ru/articles/305900/
+//https://cheatography.com/romansemko/cheat-sheets/ecmascript-6-es6/pdf_bw/
 
-// чтобы создать новый элемент
+// 3.10 let and const
 
-let div = document.createElement('div'),
-    text = document.createTextNode('text here...');
+function makeArray() {
+    var items = [];
 
-//добавляем класс к созданному элементу
-div.classList.add('black');
+    for (let i = 0; i < 10; i++) {
+        var item = function () {
+            console.log(i);
+        };
 
-//вставляем элемент на страницу
-// document.body.appendChild(div);
+        items.push(item);
+    }
 
-// вставлять элементы можно не только в body, но в любой родительский элемент
-wrapper.appendChild(div);
+    return items;
+}
 
-// вставить элемент до
-document.body.insertBefore(div, circle[0]);
+var arr = makeArray();
 
-// удаление элемента со страницы
-document.body.removeChild(circle[1]);
-wrapper.removeChild(heart[0]);
-document.body.replaceChild(btn[1], circle[1]);
+arr[1]();
+arr[4]();
+arr[8]();
 
-// добавляем текст в эелемент
-div.innerHTML = 'Hello';
+//Переменная, созданная с помощью var используется во всем цикле. Если создать с помощью let, то она локальная, строка 21
 
-// если хотим вставить HTML код, но безопаснее div.textContent = '<h1>Hello</h1>';
-div.innerHTML = '<h1>Hello</h1>';
+// Стрелочные функции
 
+let fun = () => {
+    console.log(this);
+};
 
-// - выборка элементов на странице
-// - добавление стилей
-// - добавление элементов на страницу
-// - удаление элементов
-// - замена элементов
-// - добавление текста в элементы
+//fun();
+
+// Стрелочные функции анонимны. Ее можно присвоить переменной и потом вызвать. Не имеет своего контекста вызова
+
+let obj = {
+    number: 5,
+    sayNumber: function () {
+        let say = () => {
+            console.log(this);
+        };
+        say();
+    }
+}
+
+obj.sayNumber();
+
+// 3.13 Классы
+
+class Rectangle {
+    constructor(height, width = 20) {
+        this.height = height;
+        this.width = width;
+    }
+    calcArea() {
+        return this.height * this.width;
+    }
+}
+
+const square = new Rectangle(4);
+
+console.log(square.calcArea());
+
+//http://jsraccoon.ru/es6-classes
+//https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Classes
+
+// 3.14 Spread-операторы
+
+//Разворачивает массив и превращает в набор данных
+
+let video = ['youtube', 'vimeo', 'rutube'],
+    blogs = ['wp', 'livejournal', 'blogger'],
+    internet = [...video, ...blogs, 'vk', 'fb'];
+
+console.log(internet);
+
+function log(a, b, c) {
+    console.log(a);
+    console.log(b);
+    console.log(c);
+}
+
+let numbrs = [2, 5, 7];
+
+log(...numbrs);
+
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
