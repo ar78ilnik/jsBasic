@@ -1,58 +1,78 @@
-let box = document.getElementById('box'),
-    btn = document.getElementsByTagName('button'), // Множественное число Elements говорит о том, что это псевдо-массив
-    circle = document.getElementsByClassName('circle'), // Множественное число Elements говорит о том, что это псевдо-массив, без точки
-    heart = document.querySelectorAll('.heart'), // этот псевдо-массив имеет только один метод forEach
-    wrapper = document.querySelector('.wrapper');
+// 4.1 Promise
 
-// изменяем стили элементов
+// Если произошло что-то, то мы обещаем что выполним действие. Если происходит событие клика, то должно произойти другое действие. Для этого мы используем колбэки.
 
-// в js для задания стилей используется camel case
-box.style.backgroundColor = 'blue';
+// Пример
 
-// вторую кнопку делаем овальной
-btn[1].style.borderRadius = '50%';
-
-//круги превращаем в светофор
-circle[0].style.backgroundColor = 'red';
-circle[1].style.backgroundColor = 'yellow';
-circle[2].style.backgroundColor = 'green';
-
-//heart.forEach(item => {
-//    item.style.background = 'green';
+//let btn = addEventListener('click', function () {
+//    console.log('Done...');
+//});
+//
+//// Часто можно встретить много действий, и нужно написать много функций обратного действия и тогда код становится не читаемым. 
+//
+//let func1 = function (param, func2) {
+//    func2(function (param, func3) {
+//        func3(function (param, func4) {
+//            func4(function (param, func5) {
+//                //...
+//            })
+//        })
+//    })
+//}
+//
+//// Пока первая функция выполняется, вся конструкция находится в ожидании (pending). Как пример, опишем выстрел из лука.
+//
+//function shoot(arrow, headshot, fail) {
+//    console.log('Высделали выстрел...');
+//
+//    setTimeout(function () {
+//        Math.random() > .5 ? headshot({}) : fail('Вы промахнулись');
+//    }, 3000);
+//};
+//
+//function win() {
+//    console.log('Вы попедили');
+//}
+//
+//function loose() {
+//    console.log('Вы проиграли');
+//}
+//
+//shoot({}, function (mark) {
+//    win();
+//}, function (miss) {
+//    loose();
 //});
 
-// чтобы создать новый элемент
-
-let div = document.createElement('div'),
-    text = document.createTextNode('text here...');
-
-//добавляем класс к созданному элементу
-div.classList.add('black');
-
-//вставляем элемент на страницу
-// document.body.appendChild(div);
-
-// вставлять элементы можно не только в body, но в любой родительский элемент
-wrapper.appendChild(div);
-
-// вставить элемент до
-document.body.insertBefore(div, circle[0]);
-
-// удаление элемента со страницы
-document.body.removeChild(circle[1]);
-wrapper.removeChild(heart[0]);
-document.body.replaceChild(btn[1], circle[1]);
-
-// добавляем текст в эелемент
-div.innerHTML = 'Hello';
-
-// если хотим вставить HTML код, но безопаснее div.textContent = '<h1>Hello</h1>';
-div.innerHTML = '<h1>Hello</h1>';
+// Данная структура может разрастаться. Переписываем функцию с помощью промесов
 
 
-// - выборка элементов на странице
-// - добавление стилей
-// - добавление элементов на страницу
-// - удаление элементов
-// - замена элементов
-// - добавление текста в элементы
+function shoot(arrow) {
+    console.log('Высделали выстрел...');
+    let promise = new Promise(function (resolve, reject) {
+        // resolve - обещание выполнилось
+        // reject - обещание не выполнилось
+        setTimeout(function () {
+            Math.random() > .5 ? resolve({}) : reject('Вы промахнулись');
+        }, 1000);
+    });
+    return promise;
+};
+
+function win() {
+    console.log('Вы попедили');
+}
+
+function loose() {
+    console.log('Вы проиграли');
+}
+
+//shoot({}, function (mark) {
+//    win();
+//}, function (miss) {
+//    loose();
+//});
+
+// Это была первая часть как создать промис
+
+shoot({}).then(win).catch(loose);
