@@ -1,58 +1,63 @@
-let box = document.getElementById('box'),
-    btn = document.getElementsByTagName('button'), // Множественное число Elements говорит о том, что это псевдо-массив
-    circle = document.getElementsByClassName('circle'), // Множественное число Elements говорит о том, что это псевдо-массив, без точки
-    heart = document.querySelectorAll('.heart'), // этот псевдо-массив имеет только один метод forEach
-    wrapper = document.querySelector('.wrapper');
+// Работа с сохранением данных без БД. Данные сохранятся если мы перезагрузим страницу или даже закроем браузер. Эта технология называется localStorage. Это встроенный в браузер объект, который может хранить различные данные. По сути это свойство глобального объекта Window. Где его можно найти. Преходим во вкладку Application. Вкладка Storage. Можно увидеть два поля: ключ(key) и значение(value). Зачем вообще нужно? Например, человек делает настройки сайта и при повторном входе все должно оставаться на местах. Или установить данные формы, или установить время. В него помещается около 5 мб памяти.
 
-// изменяем стили элементов
+// Чтобы записать в объект
 
-// в js для задания стилей используется camel case
-box.style.backgroundColor = 'blue';
+//localStorage.setItem("number", 1);
+//
+//// Если такое поле уже существует, то значение перезапишется. Чтобы получить значение этого ключа, используется команда getItem
+//
+//console.log(localStorage.getItem("number"));
+//
+////Удаляем ключ
+//
+//localStorage.removeItem("number");
+//console.log(localStorage.getItem("number"), "2");
+//
+//// Чтобы очистить все хранилище
+//
+//localStorage.clear();
 
-// вторую кнопку делаем овальной
-btn[1].style.borderRadius = '50%';
+// Есть небольшая форма, потренируемся использовать localStorage. Необходимо, чтобы когда пользователь нажал чекбокс, она у него оставалась активной. При клике на чекбокс, в localStorage будет записываться определенное значение.
 
-//круги превращаем в светофор
-circle[0].style.backgroundColor = 'red';
-circle[1].style.backgroundColor = 'yellow';
-circle[2].style.backgroundColor = 'green';
-
-//heart.forEach(item => {
-//    item.style.background = 'green';
-//});
-
-// чтобы создать новый элемент
-
-let div = document.createElement('div'),
-    text = document.createTextNode('text here...');
-
-//добавляем класс к созданному элементу
-div.classList.add('black');
-
-//вставляем элемент на страницу
-// document.body.appendChild(div);
-
-// вставлять элементы можно не только в body, но в любой родительский элемент
-wrapper.appendChild(div);
-
-// вставить элемент до
-document.body.insertBefore(div, circle[0]);
-
-// удаление элемента со страницы
-document.body.removeChild(circle[1]);
-wrapper.removeChild(heart[0]);
-document.body.replaceChild(btn[1], circle[1]);
-
-// добавляем текст в эелемент
-div.innerHTML = 'Hello';
-
-// если хотим вставить HTML код, но безопаснее div.textContent = '<h1>Hello</h1>';
-div.innerHTML = '<h1>Hello</h1>';
+// Также есть кнопка changeForm
 
 
-// - выборка элементов на странице
-// - добавление стилей
-// - добавление элементов на страницу
-// - удаление элементов
-// - замена элементов
-// - добавление текста в элементы
+window.addEventListener('DOMContentLoaded', function () {
+    let checkbox = document.getElementById('rememberMe'),
+        change = document.getElementById('change'),
+        form = document.getElementsByTagName('form');
+
+    if (localStorage.getItem("isChecked") === true) {
+        checkbox.checked = true;
+    }
+
+    if (localStorage.getItem("bg") === "changed") {
+        form.style.backgroundColor = 'aqua';
+    }
+
+    checkbox.addEventListener('click', function () {
+        localStorage.setItem("isChecked", true);
+    });
+
+    change.addEventListener('click', function () {
+        localStorage.setItem("bg", 'changed');
+        form.style.backgroundColor = 'aqua';
+    });
+
+});
+
+// localStorage привязывается к определенному домену и его нельзя использовать на другом
+
+// Если нужно записать объект, например 
+
+let persone = {
+    name: "Alex",
+    age: 25,
+    tech: ["mobile", "notebook"]
+}
+
+// методами, описанными выше, так нельзя. Поэтому нужно сделать "сериализацию данных".
+
+let serializedPerson = JSON.stringify(persone);
+localStorage.setItem("Alex", serializedPerson);
+JSON.parse(localStorage.getItem("Alex"));
