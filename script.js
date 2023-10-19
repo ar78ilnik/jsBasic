@@ -1,58 +1,20 @@
-let box = document.getElementById('box'),
-    btn = document.getElementsByTagName('button'), // Множественное число Elements говорит о том, что это псевдо-массив
-    circle = document.getElementsByClassName('circle'), // Множественное число Elements говорит о том, что это псевдо-массив, без точки
-    heart = document.querySelectorAll('.heart'), // этот псевдо-массив имеет только один метод forEach
-    wrapper = document.querySelector('.wrapper');
+//Иногда в консоли появляется много ошибок и не всегда они вызваны работой программы. Это может быть связано с сервером, провайдером и т.д. Посмотреть можно во вкладке Source. Иногда код сжатый. Будем использовать try...catch. Данная конструкция служит для перехвата ошибок. В блоке кода catch есть специальный объект, это объект ошибки. Он передается туда как аргумент и может подробно рассказать о проблемею То сообщение, что появляется в консоли это и есть этот объект. Это не ошибка браузера (она не подсвечивается красным)
 
-// изменяем стили элементов
+let json = {
+    "id": 2
+}
+// Представим что эти данные приходят от сервера, и мы распарсим эти данные в объект и создадим нового пользователя в блоке try
+try {
+    let user = JSON.parse(json);
+    console.log(user);
 
-// в js для задания стилей используется camel case
-box.style.backgroundColor = 'blue';
-
-// вторую кнопку делаем овальной
-btn[1].style.borderRadius = '50%';
-
-//круги превращаем в светофор
-circle[0].style.backgroundColor = 'red';
-circle[1].style.backgroundColor = 'yellow';
-circle[2].style.backgroundColor = 'green';
-
-//heart.forEach(item => {
-//    item.style.background = 'green';
-//});
-
-// чтобы создать новый элемент
-
-let div = document.createElement('div'),
-    text = document.createTextNode('text here...');
-
-//добавляем класс к созданному элементу
-div.classList.add('black');
-
-//вставляем элемент на страницу
-// document.body.appendChild(div);
-
-// вставлять элементы можно не только в body, но в любой родительский элемент
-wrapper.appendChild(div);
-
-// вставить элемент до
-document.body.insertBefore(div, circle[0]);
-
-// удаление элемента со страницы
-document.body.removeChild(circle[1]);
-wrapper.removeChild(heart[0]);
-document.body.replaceChild(btn[1], circle[1]);
-
-// добавляем текст в эелемент
-div.innerHTML = 'Hello';
-
-// если хотим вставить HTML код, но безопаснее div.textContent = '<h1>Hello</h1>';
-div.innerHTML = '<h1>Hello</h1>';
-
-
-// - выборка элементов на странице
-// - добавление стилей
-// - добавление элементов на страницу
-// - удаление элементов
-// - замена элементов
-// - добавление текста в элементы
+    if (!user.name) {
+        throw new Error("Это новая ошибка");
+    }
+} catch (error) {
+    console.log(error.name, 'name');
+    console.log(error.message, 'message');
+    console.log(error.stack, 'stack');
+} finally {
+    console.log('А я выполнюсь всегда')
+}
