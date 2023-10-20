@@ -1,58 +1,115 @@
-let box = document.getElementById('box'),
-    btn = document.getElementsByTagName('button'), // Множественное число Elements говорит о том, что это псевдо-массив
-    circle = document.getElementsByClassName('circle'), // Множественное число Elements говорит о том, что это псевдо-массив, без точки
-    heart = document.querySelectorAll('.heart'), // этот псевдо-массив имеет только один метод forEach
-    wrapper = document.querySelector('.wrapper');
+//function User(name, age) {
+//    this.name = name;
+//    this.age = age;
+//
+//    this.say = function () {
+//        console.log(`Имя пользователя ${this.name} и возраст ${this.age}`);
+//    }
+//}
 
-// изменяем стили элементов
+////let ivan = new User("Alex", 25);
+//console.log(ivan.name); // Ivan
+//console.log(ivan.age); // 25
+//
+////ivan.name = Alex;
+////ivan.age = 30;
+//
+//console.log(ivan.name); // Alex
+//console.log(ivan.age); // 30
 
-// в js для задания стилей используется camel case
-box.style.backgroundColor = 'blue';
+// Получается, что пользователь может изменить объект. Чтобы этого не произошло, нужно внутри объекта объявить переменную
 
-// вторую кнопку делаем овальной
-btn[1].style.borderRadius = '50%';
+//function User(name, age) {
+//    this.name = name;
+//    // this.age = age;
+//    let userAge = age;
+//
+//    this.say = function () {
+//        console.log(`Имя пользователя ${this.name} и возраст ${this.age}`);
+//    }
+//}
+//
+//ivan.name = Alex;
+//ivan.userAge = 30;
+//
+//console.log(ivan.name); // Alex
+//console.log(ivan.age); // undefined
 
-//круги превращаем в светофор
-circle[0].style.backgroundColor = 'red';
-circle[1].style.backgroundColor = 'yellow';
-circle[2].style.backgroundColor = 'green';
+// Используются такие понятия как gettory и settory. Это методы нашего объекта, которые позволяют получать и изменять данные объекта. Они делают объект более безопасным.
 
-//heart.forEach(item => {
-//    item.style.background = 'green';
-//});
+//function User(name, age) {
+//    let userName, userAge;
+//
+//    this.getName = function () {
+//        return userName;
+//    }
+//
+//    this.setName = function (name) {
+//        userName = name;
+//    }
+//
+//    this.getAge = function () { // геттер
+//        return userAge;
+//    }
+//
+//    this.setAge = function (age) { // сеттер
+//        userAge = age;
+//    }
+//
+//    this.say = function () {
+//        console.log(`Имя пользователя ${this.getName()} и возраст ${this.getAge()}`);
+//    }
+//}
+//
+//let ivan = new User("Ivan", 25);
+//
+//ivan.setAge(35);
+//ivan.setName("Alex");
+//ivan.say();
 
-// чтобы создать новый элемент
+// Создаем модуль
 
-let div = document.createElement('div'),
-    text = document.createTextNode('text here...');
+//let number = 1;
+//
+//(function () {
+//    let number = 2;
+//    console.log(number);
+//    return console.log(number + 3);
+//}())
+//
+//console.log(number);
 
-//добавляем класс к созданному элементу
-div.classList.add('black');
+// Второй способ - использование объектного интерфейса. Наш модуль записываем в переменную и в нем возращаем методы, которые будут доступны снаружи
 
-//вставляем элемент на страницу
-// document.body.appendChild(div);
+//let user = (function () {
+//    let privat = function () {
+//        console.log('I am privat');
+//    }
+//
+//    return {
+//        sayHello: function () {
+//            console.log('Hello');
+//        }
+//    }
+//}())
+//
+//console.log(user);
+//console.log(user.sayHello());
 
-// вставлять элементы можно не только в body, но в любой родительский элемент
-wrapper.appendChild(div);
+// Третий метод
 
-// вставить элемент до
-document.body.insertBefore(div, circle[0]);
+let user = (function () {
+    let privat = function () {
+        console.log('I am privat');
+    }
 
-// удаление элемента со страницы
-document.body.removeChild(circle[1]);
-wrapper.removeChild(heart[0]);
-document.body.replaceChild(btn[1], circle[1]);
+    let sayHello = function () {
+        console.log('Hello');
+    }
 
-// добавляем текст в эелемент
-div.innerHTML = 'Hello';
+    return {
+        privat: privat()
+    }
+}())
 
-// если хотим вставить HTML код, но безопаснее div.textContent = '<h1>Hello</h1>';
-div.innerHTML = '<h1>Hello</h1>';
-
-
-// - выборка элементов на странице
-// - добавление стилей
-// - добавление элементов на страницу
-// - удаление элементов
-// - замена элементов
-// - добавление текста в элементы
+console.log(user.privat);
